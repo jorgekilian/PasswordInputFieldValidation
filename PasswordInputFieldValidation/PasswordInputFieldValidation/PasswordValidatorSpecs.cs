@@ -17,8 +17,8 @@ namespace PasswordInputFieldValidation {
     }
 
     public class PasswordInputField {
-        public static bool Validate(string s) {
-            throw new System.NotImplementedException();
+        public static bool Validate(string inputPassword) {
+            return false;
         }
     }
 }
