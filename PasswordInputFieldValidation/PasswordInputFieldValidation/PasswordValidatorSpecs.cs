@@ -17,7 +17,7 @@ namespace PasswordInputFieldValidation {
 
         [Test]
         public void return_specific_message_when_string_be_less_8_characters_long() {
-            var password = "a";
+            var password = "a12";
 
             var validate = PasswordInputField.Validate(password);
 
@@ -33,21 +33,41 @@ namespace PasswordInputFieldValidation {
             Assert.AreEqual(false, validate.Valid);
             Assert.AreEqual("The password must contain at least 2 numbers", validate.Message);
         }
+
+        [Test]
+        public void return_two_messages_when_string_doesnt_have_two_number_and_lengh_less_than_8() {
+            var password = "abcdfg4";
+
+            var validate = PasswordInputField.Validate(password);
+
+            Assert.AreEqual(false, validate.Valid);
+            Assert.AreEqual("Password must be at least 8 characters\nThe password must contain at least 2 numbers", validate.Message);
+        }
     }
 
-    public class PasswordInputField {
+    public static class PasswordInputField {
         public static Result Validate(string inputPassword) {
-            if (inputPassword.Length < 8)
-                return new Result {
-                    Valid = false,
-                    Message = "Password must be at least 8 characters"
-                };
+            var digits = 0;
+            var result = new Result { Valid = true, Message = string.Empty };
+            if (inputPassword.Length < 8) {
+                result.Valid = false;
+                result.Message = "Password must be at least 8 characters";
+            }
 
-            return new Result {
-                Valid = false,
-                Message = "The password must contain at least 2 numbers"
-            };
+            for (var i = 0; i < inputPassword.Length; i++) {
+                if (char.IsDigit(inputPassword[i]))
+                    digits += 1;
+            }
 
+            if (digits < 2) {
+                result.Valid = false;
+                if (result.Message == string.Empty)
+                    result.Message = "The password must contain at least 2 numbers";
+                else
+                    result.Message = $"{result.Message}\nThe password must contain at least 2 numbers";
+            }
+
+            return result;
         }
     }
 
