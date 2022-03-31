@@ -1,3 +1,4 @@
+using System.Linq;
 using NUnit.Framework;
 
 namespace PasswordInputFieldValidation {
@@ -47,19 +48,13 @@ namespace PasswordInputFieldValidation {
 
     public static class PasswordInputField {
         public static Result Validate(string inputPassword) {
-            var digits = 0;
             var result = new Result { Valid = true, Message = string.Empty };
             if (inputPassword.Length < 8) {
                 result.Valid = false;
                 result.Message = "Password must be at least 8 characters";
             }
 
-            for (var i = 0; i < inputPassword.Length; i++) {
-                if (char.IsDigit(inputPassword[i]))
-                    digits += 1;
-            }
-
-            if (digits < 2) {
+            if (inputPassword.Count(char.IsDigit) < 2) {
                 result.Valid = false;
                 if (result.Message == string.Empty)
                     result.Message = "The password must contain at least 2 numbers";
