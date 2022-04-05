@@ -45,6 +45,15 @@ namespace PasswordInputFieldValidation {
             Assert.AreEqual(validate.Message.Contains("The password must contain at least one capital letter"), true);
         }
 
+        [Test]
+        public void return_non_valid_password_and_specific_message_when_string_doesnt_have_one_special_character() {
+            var password = "abcdefg4";
+
+            var validate = PasswordInputField.Validate(password);
+
+            Assert.AreEqual(false, validate.Valid);
+            Assert.AreEqual(validate.Message.Contains("The password must contain at least one specail character"), true);
+        }
 
         [Test]
         public void return_two_messages_when_string_doesnt_have_two_number_and_lengh_less_than_8() {
@@ -76,6 +85,12 @@ namespace PasswordInputFieldValidation {
                 result.Valid = false;
                 if (result.Message != string.Empty) result.Message = $"{result.Message}\n";
                 result.Message = $"{result.Message}The password must contain at least one capital letter";
+            }
+
+            if (inputPassword.Count(char.IsLetterOrDigit) == inputPassword.Length) {
+                result.Valid = false;
+                if (result.Message != string.Empty) result.Message = $"{result.Message}\n";
+                result.Message = $"{result.Message}The password must contain at least one specail character";
             }
 
             return result;
