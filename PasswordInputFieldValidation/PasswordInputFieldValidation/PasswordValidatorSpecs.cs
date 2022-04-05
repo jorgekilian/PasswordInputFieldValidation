@@ -22,7 +22,7 @@ namespace PasswordInputFieldValidation {
 
             var validate = PasswordInputField.Validate(password);
 
-            Assert.AreEqual("Password must be at least 8 characters", validate.Message);
+            Assert.AreEqual(validate.Message.Contains("Password must be at least 8 characters"), true);
         }
 
         [Test]
@@ -32,8 +32,19 @@ namespace PasswordInputFieldValidation {
             var validate = PasswordInputField.Validate(password);
 
             Assert.AreEqual(false, validate.Valid);
-            Assert.AreEqual("The password must contain at least 2 numbers", validate.Message);
+            Assert.AreEqual(validate.Message.Contains("The password must contain at least 2 numbers"), true);
         }
+
+        [Test]
+        public void return_non_valid_password_and_specific_message_when_string_doesnt_have_one_capital_letter() {
+            var password = "abcdefg4";
+
+            var validate = PasswordInputField.Validate(password);
+
+            Assert.AreEqual(false, validate.Valid);
+            Assert.AreEqual(validate.Message.Contains("The password must contain at least one capital letter"), true);
+        }
+
 
         [Test]
         public void return_two_messages_when_string_doesnt_have_two_number_and_lengh_less_than_8() {
@@ -42,7 +53,8 @@ namespace PasswordInputFieldValidation {
             var validate = PasswordInputField.Validate(password);
 
             Assert.AreEqual(false, validate.Valid);
-            Assert.AreEqual("Password must be at least 8 characters\nThe password must contain at least 2 numbers", validate.Message);
+            Assert.AreEqual(validate.Message.Contains("Password must be at least 8 characters"), true);
+            Assert.AreEqual(validate.Message.Contains("The password must contain at least 2 numbers"), true);
         }
     }
 
@@ -56,10 +68,14 @@ namespace PasswordInputFieldValidation {
 
             if (inputPassword.Count(char.IsDigit) < 2) {
                 result.Valid = false;
-                if (result.Message == string.Empty)
-                    result.Message = "The password must contain at least 2 numbers";
-                else
-                    result.Message = $"{result.Message}\nThe password must contain at least 2 numbers";
+                if (result.Message != string.Empty) result.Message = $"{result.Message}\n";
+                result.Message = $"{result.Message}The password must contain at least 2 numbers";
+            }
+
+            if (inputPassword.Count(char.IsUpper) == 0) {
+                result.Valid = false;
+                if (result.Message != string.Empty) result.Message = $"{result.Message}\n";
+                result.Message = $"{result.Message}The password must contain at least one capital letter";
             }
 
             return result;
