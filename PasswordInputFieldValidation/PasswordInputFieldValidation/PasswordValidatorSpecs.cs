@@ -55,18 +55,8 @@ namespace PasswordInputFieldValidation {
             Assert.AreEqual(validate.Message.Contains("The password must contain at least one specail character"), true);
         }
 
-        [Test]
-        public void return_two_messages_when_string_doesnt_have_two_number_and_lengh_less_than_8() {
-            var password = "abcdfg4";
-
-            var validate = PasswordInputField.Validate(password);
-
-            Assert.AreEqual(false, validate.Valid);
-            Assert.AreEqual(validate.Message.Contains("Password must be at least 8 characters"), true);
-            Assert.AreEqual(validate.Message.Contains("The password must contain at least 2 numbers"), true);
-        }
     }
-
+    
     public static class PasswordInputField {
         public static Result Validate(string inputPassword) {
             var result = new Result { Valid = true, Message = string.Empty };
