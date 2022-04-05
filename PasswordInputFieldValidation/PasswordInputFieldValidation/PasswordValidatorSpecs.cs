@@ -55,6 +55,14 @@ namespace PasswordInputFieldValidation {
             Assert.AreEqual(validate.Message.Contains("The password must contain at least one specail character"), true);
         }
 
+        [Test]
+        public void return_valid_password_and_specific_message_when_string_is_correct() {
+            var password = "aBcd€f34";
+
+            var validate = PasswordInputField.Validate(password);
+
+            Assert.AreEqual(true, validate.Valid);
+        }
     }
     
     public static class PasswordInputField {
